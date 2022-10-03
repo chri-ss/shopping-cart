@@ -1,5 +1,9 @@
 const Home = () => {
-  return <div>Home</div>;
+  return (
+    <div className="route">
+      <h1>A Magic: The Gathering™ store for the distinguished collector</h1>
+    </div>
+  );
 };
 
 export default Home;
