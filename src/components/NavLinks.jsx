@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 const NavLinks = () => {
   return (
-    <nav>
+    <nav className="header">
       <ul className="navlinks">
         <Link to="/">
           <li>Home</li>
