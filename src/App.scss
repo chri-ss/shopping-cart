@@ -42,7 +42,6 @@ body {
   font-size: 32px;
 }
 
-
 .shopping {
   width: 90%;
   background-color: #fdfdff;
@@ -52,7 +51,15 @@ body {
   width: 100%;
   display: flex;
   flex-wrap: wrap;
+  padding-top: 10vh;
+  justify-content: center;
+  align-items: center;
 }
 
 .card {
+  height: 40vh;
+
+  img {
+    height: 100%;
+  }
 }

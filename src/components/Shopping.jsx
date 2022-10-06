@@ -5,8 +5,8 @@ const Shopping = ({ cards }) => {
     <div className="route" data-testid="shopping">
       <CardOptions />
       <section className="shopping">
-        <div className="card-container">
-          <ul>
+        <div >
+          <ul className="card-container">
             {cards.data.map((card) => (
               <li className="card">
                 <img src={card.image_uris.border_crop}></img>;
