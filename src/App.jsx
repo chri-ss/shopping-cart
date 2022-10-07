@@ -7,7 +7,7 @@ import Cart from "./components/Cart";
 import { useEffect, useState } from "react";
 
 const App = () => {
-  const [cards, setCards] = useState("");
+  const [cards, setCards] = useState({ data: [] });
 
   const cardLoader = async () => {
     const response = await fetch(
@@ -28,7 +28,16 @@ const App = () => {
       <NavLinks />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="shopping" element={<Shopping cards={cards} />} />
+        <Route
+          path="shopping"
+          element={
+            <Shopping
+              cards={cards}
+              setCards={setCards}
+              cardLoader={cardLoader}
+            />
+          }
+        />
         <Route path="cart" element={<Cart />} />
       </Routes>
     </HashRouter>

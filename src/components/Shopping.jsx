@@ -1,11 +1,16 @@
+import { useEffect } from "react";
 import CardOptions from "./CardOptions";
 
-const Shopping = ({ cards }) => {
+const Shopping = ({ cards, setCards, cardLoader }) => {
+  useEffect(() => {
+    cardLoader();
+  }, []);
+
   return (
-    <div className="route" data-testid="shopping">
+    <div className="route">
       <CardOptions />
       <section className="shopping">
-        <div >
+        <div>
           <ul className="card-container">
             {cards.data.map((card) => (
               <li className="card">
