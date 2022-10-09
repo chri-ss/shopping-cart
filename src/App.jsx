@@ -9,19 +9,27 @@ import { useEffect, useState } from "react";
 const App = () => {
   const [cards, setCards] = useState({ data: [] });
 
-  const cardLoader = async () => {
-    const response = await fetch(
-      "https://api.scryfall.com/cards/search?q=s%3Aaer"
-    );
-    const cardData = await response.json();
-
-    setCards(cardData);
+  const checkForMoreCards = async (cardData, cardHold = null) => {
+    if (cardHold === null) {
+      cardHold = cardData.data;
+    }
+    if (cardData.has_more) {
+      const response = await fetch(cardData.next_page);
+      const moreCardData = await response.json();
+      cardHold = cardHold.concat(moreCardData.data);
+      checkForMoreCards(moreCardData, cardHold);
+    }
+    return cardHold;
   };
 
-  useEffect(() => {
-    cardLoader();
-    console.log(cards);
-  }, []);
+  const cardLoader = async () => {
+    const response = await fetch(
+      "https://api.scryfall.com/cards/search?q=s%3Ausg"
+    );
+    const cardData = await response.json();
+    const finalCardData = await checkForMoreCards(cardData);
+    setCards({ data: finalCardData });
+  };
 
   return (
     <HashRouter>
@@ -30,13 +38,7 @@ const App = () => {
         <Route path="/" element={<Home />} />
         <Route
           path="shopping"
-          element={
-            <Shopping
-              cards={cards}
-              setCards={setCards}
-              cardLoader={cardLoader}
-            />
-          }
+          element={<Shopping cards={cards} cardLoader={cardLoader} />}
         />
         <Route path="cart" element={<Cart />} />
       </Routes>

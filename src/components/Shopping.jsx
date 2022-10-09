@@ -1,9 +1,10 @@
 import { useEffect } from "react";
 import CardOptions from "./CardOptions";
 
-const Shopping = ({ cards, setCards, cardLoader }) => {
+const Shopping = ({ cards, cardLoader }) => {
   useEffect(() => {
     cardLoader();
+    console.log(cards);
   }, []);
 
   return (

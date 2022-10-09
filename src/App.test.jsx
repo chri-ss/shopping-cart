@@ -1,6 +1,6 @@
 import React from "react";
 import { Vitest, describe, it, expect, vi } from "vitest";
-import { render, screen, rerender, act } from "@testing-library/react";
+import { render, screen, act } from "@testing-library/react";
 import App from "./App";
 import "@testing-library/jest-dom";
 import userEvent from "@testing-library/user-event";
@@ -22,8 +22,6 @@ global.fetch = vi.fn(() =>
 );
 
 describe("Routes to different tabs", () => {
-  // beforeAll(() => act(() => render(<App />)));
-
   it("moves to shopping tab", async () => {
     act(() => render(<App />));
     const shopping = screen.getByText("Shopping");
