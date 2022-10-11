@@ -8,8 +8,24 @@ import { useEffect, useState } from "react";
 
 const App = () => {
   const [cards, setCards] = useState({ data: [] });
+  const [currentSet, setCurrentSet] = useState("bro");
+  const [sets, setSets] = useState({ data: [{ name: "" }] });
+
+  const loadSets = async () => {
+    const response = await fetch("https://api.scryfall.com/sets/");
+    const allSets = await response.json();
+    const filteredSets = {
+      ...allSets,
+      data: allSets.data.filter(
+        (set) => set.set_type === "core" || set.set_type === "expansion"
+      ),
+    };
+    console.log(filteredSets);
+    setSets(filteredSets);
+  };
 
   const checkForMoreCards = async (cardData, cardHold = null) => {
+    //ensures all cards in a set are loaded
     if (cardHold === null) {
       cardHold = cardData.data;
     }
@@ -22,14 +38,25 @@ const App = () => {
     return cardHold;
   };
 
-  const cardLoader = async () => {
+  const loadCards = async () => {
     const response = await fetch(
-      "https://api.scryfall.com/cards/search?q=s%3Ausg"
+      `https://api.scryfall.com/cards/search?q=s%3A${currentSet}`
     );
     const cardData = await response.json();
     const finalCardData = await checkForMoreCards(cardData);
+    console.log(finalCardData);
     setCards({ data: finalCardData });
   };
+
+  const handleSetChange = async (e) => {
+    setCurrentSet(e.target.value.toString());
+    console.log(currentSet);
+    await loadCards();
+  };
+
+  useEffect(() => {
+    loadCards();
+  }, [currentSet]);
 
   return (
     <HashRouter>
@@ -38,7 +65,16 @@ const App = () => {
         <Route path="/" element={<Home />} />
         <Route
           path="shopping"
-          element={<Shopping cards={cards} cardLoader={cardLoader} />}
+          element={
+            <Shopping
+              cards={cards}
+              loadCards={loadCards}
+              currentSet={currentSet}
+              sets={sets}
+              loadSets={loadSets}
+              handleSetChange={handleSetChange}
+            />
+          }
         />
         <Route path="cart" element={<Cart />} />
       </Routes>

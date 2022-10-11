@@ -39,24 +39,33 @@ body {
   align-items: center;
   color: #fdfdff;
   font-size: 32px;
+  flex-direction: column;
 }
 
-.home, .cart {
+.home,
+.cart {
   height: 100vh;
 }
 
 .shopping {
   width: 90%;
   background-color: #fdfdff;
+  padding-top: 10vh;
+
+  form {
+    display: flex;
+    justify-content: center;
+  }
 }
 
 .card-container {
   width: 100%;
   display: flex;
   flex-wrap: wrap;
-  padding-top: 10vh;
+
   justify-content: center;
   align-items: center;
+  gap: 1rem;
 }
 
 .card {
