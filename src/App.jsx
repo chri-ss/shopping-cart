@@ -24,6 +24,20 @@ const App = () => {
     setSets(filteredSets);
   };
 
+  const paginate = (cards, perPage) => {
+    const paginatedCards = [];
+    let hold = [];
+    const length = cards.length;
+    for (let i = 0; i < length; ++i) {
+      hold.push(cards.shift());
+      if (hold.length === perPage) {
+        paginatedCards.push(hold);
+        hold = [];
+      }
+    }
+    return paginatedCards;
+  };
+
   const checkForMoreCards = async (cardData, cardHold = null) => {
     //ensures all cards in a set are loaded
     if (cardHold === null) {
@@ -45,7 +59,7 @@ const App = () => {
     const cardData = await response.json();
     const finalCardData = await checkForMoreCards(cardData);
     console.log(finalCardData);
-    setCards({ data: finalCardData });
+    setCards({ data: paginate(finalCardData, 50) });
   };
 
   const handleSetChange = async (e) => {
