@@ -5,6 +5,7 @@ body {
 
 #root {
   height: 100%;
+  width: 100%;
   background-color: #393d3f;
 }
 
@@ -74,4 +75,18 @@ body {
   img {
     height: 100%;
   }
+}
+
+.pages {
+  display: flex;
+  justify-content: center;
+  color: #393d3f;
+}
+
+.page {
+  cursor: pointer;
+}
+
+.page:hover {
+  color: #62929e;
 }

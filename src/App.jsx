@@ -7,9 +7,10 @@ import Cart from "./components/Cart";
 import { useEffect, useState } from "react";
 
 const App = () => {
-  const [cards, setCards] = useState({ data: [] });
+  const [cards, setCards] = useState({ data: [[]] });
   const [currentSet, setCurrentSet] = useState("bro");
   const [sets, setSets] = useState({ data: [{ name: "" }] });
+  const [page, setPage] = useState(1);
 
   const loadSets = async () => {
     const response = await fetch("https://api.scryfall.com/sets/");
@@ -22,6 +23,21 @@ const App = () => {
     };
     console.log(filteredSets);
     setSets(filteredSets);
+  };
+
+  const paginate = (cards, perPage) => {
+    const paginatedCards = [];
+    let hold = [];
+    const length = cards.length;
+    for (let i = 0; i < length; ++i) {
+      hold.push(cards.shift());
+      if (hold.length === perPage) {
+        paginatedCards.push(hold);
+        hold = [];
+      }
+    }
+    paginatedCards.push(hold);
+    return paginatedCards;
   };
 
   const checkForMoreCards = async (cardData, cardHold = null) => {
@@ -38,24 +54,30 @@ const App = () => {
     return cardHold;
   };
 
+  const filterOutMissingImages = (cards) => {
+    return cards.filter((card) => card.image_uris);
+  };
+
   const loadCards = async () => {
     const response = await fetch(
       `https://api.scryfall.com/cards/search?q=s%3A${currentSet}`
     );
     const cardData = await response.json();
-    const finalCardData = await checkForMoreCards(cardData);
-    console.log(finalCardData);
-    setCards({ data: finalCardData });
+    const moreCardData = await checkForMoreCards(cardData);
+    const finalCardData = filterOutMissingImages(moreCardData);
+    setCards({ data: paginate(finalCardData, 50) });
   };
 
   const handleSetChange = async (e) => {
     setCurrentSet(e.target.value.toString());
-    console.log(currentSet);
+    setPage(1);
     await loadCards();
   };
 
   useEffect(() => {
     loadCards();
+    console.log(cards);
+    console.log(page);
   }, [currentSet]);
 
   return (
@@ -67,8 +89,9 @@ const App = () => {
           path="shopping"
           element={
             <Shopping
+              page={page}
+              setPage={setPage}
               cards={cards}
-              loadCards={loadCards}
               currentSet={currentSet}
               sets={sets}
               loadSets={loadSets}
