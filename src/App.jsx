@@ -10,6 +10,7 @@ const App = () => {
   const [cards, setCards] = useState({ data: [[]] });
   const [currentSet, setCurrentSet] = useState("bro");
   const [sets, setSets] = useState({ data: [{ name: "" }] });
+  const [page, setPage] = useState(1);
 
   const loadSets = async () => {
     const response = await fetch("https://api.scryfall.com/sets/");
@@ -69,12 +70,14 @@ const App = () => {
 
   const handleSetChange = async (e) => {
     setCurrentSet(e.target.value.toString());
+    setPage(1);
     await loadCards();
   };
 
   useEffect(() => {
     loadCards();
     console.log(cards);
+    console.log(page);
   }, [currentSet]);
 
   return (
@@ -86,8 +89,9 @@ const App = () => {
           path="shopping"
           element={
             <Shopping
+              page={page}
+              setPage={setPage}
               cards={cards}
-              loadCards={loadCards}
               currentSet={currentSet}
               sets={sets}
               loadSets={loadSets}
