@@ -1,5 +1,6 @@
 import CardFilter from "./CardFilter";
 import Pages from "./Pages.jsx";
+import Counter from "./Counter";
 
 const Shopping = ({
   cards,
@@ -25,7 +26,8 @@ const Shopping = ({
                 <img
                   src={card.image_uris ? card.image_uris.border_crop : null}
                 ></img>
-                ;
+
+                <Counter />
               </li>
             ))}
           </ul>
