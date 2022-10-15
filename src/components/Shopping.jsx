@@ -22,11 +22,9 @@ const Shopping = ({
           <Pages cards={cards} setPage={setPage} />
           <ul className="card-container">
             {cards.data[page - 1].map((card) => (
-              <li key={card.id} className="card">
-                <img
-                  src={card.image_uris ? card.image_uris.border_crop : null}
-                ></img>
-
+              <li key={card.id} id={card.id} className="card">
+                <img src={card.image_uris ? card.image_uris.large : null}></img>
+                <div className="price">${card.prices.usd}</div>
                 <Counter />
               </li>
             ))}

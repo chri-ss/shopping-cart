@@ -11,6 +11,7 @@ const App = () => {
   const [currentSet, setCurrentSet] = useState("bro");
   const [sets, setSets] = useState({ data: [{ name: "" }] });
   const [page, setPage] = useState(1);
+  const [cart, setCart] = useState([]);
 
   const loadSets = async () => {
     const response = await fetch("https://api.scryfall.com/sets/");
