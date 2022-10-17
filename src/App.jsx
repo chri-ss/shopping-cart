@@ -61,20 +61,28 @@ const App = () => {
   };
 
   const cacheCards = () => {
-    setCardCache([
-      ...cardCache,
-      { set: cards[0][0] ? cards[0][0].set : null, cards: cards },
-    ]);
+    if (cardCache.some((el) => el.set === cards[0][0].set)) {
+      return;
+    } else {
+      setCardCache([
+        ...cardCache,
+        { set: cards[0][0] ? cards[0][0].set : null, cards: cards },
+      ]);
+    }
   };
 
   const loadCards = async () => {
-    const response = await fetch(
-      `https://api.scryfall.com/cards/search?q=s%3A${currentSet}`
-    );
-    const cardData = await response.json();
-    const moreCardData = await checkForMoreCards(cardData);
-    const finalCardData = filterOutMissingImages(moreCardData);
-    setCards(paginate(finalCardData, 50));
+    if (cardCache.includes((cardsObj) => cardsObj.set === currentSet)) {
+      setCards(cardsObj.cards);
+    } else {
+      const response = await fetch(
+        `https://api.scryfall.com/cards/search?q=s%3A${currentSet}`
+      );
+      const cardData = await response.json();
+      const moreCardData = await checkForMoreCards(cardData);
+      const finalCardData = filterOutMissingImages(moreCardData);
+      setCards(paginate(finalCardData, 50));
+    }
   };
 
   const handleSetChange = async (e) => {
@@ -87,8 +95,11 @@ const App = () => {
     loadCards();
     cacheCards();
     console.log(cards);
-    console.log(cardCache);
   }, [currentSet]);
+
+  useEffect(() => {
+    console.log(cardCache);
+  }, [cards]);
 
   return (
     <HashRouter>
