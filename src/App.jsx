@@ -7,11 +7,12 @@ import Cart from "./components/Cart";
 import { useEffect, useState } from "react";
 
 const App = () => {
-  const [cards, setCards] = useState({ data: [[]] });
+  const [cards, setCards] = useState([[]]);
   const [currentSet, setCurrentSet] = useState("bro");
   const [sets, setSets] = useState({ data: [{ name: "" }] });
   const [page, setPage] = useState(1);
-  const [cart, setCart] = useState([]);
+  const [cardCache, setCardCache] = useState([]);
+  const [cart, setCart] = useState({});
 
   const loadSets = async () => {
     const response = await fetch("https://api.scryfall.com/sets/");
@@ -59,6 +60,13 @@ const App = () => {
     return cards.filter((card) => card.image_uris);
   };
 
+  const cacheCards = () => {
+    setCardCache([
+      ...cardCache,
+      { set: cards[0][0] ? cards[0][0].set : null, cards: cards },
+    ]);
+  };
+
   const loadCards = async () => {
     const response = await fetch(
       `https://api.scryfall.com/cards/search?q=s%3A${currentSet}`
@@ -66,7 +74,7 @@ const App = () => {
     const cardData = await response.json();
     const moreCardData = await checkForMoreCards(cardData);
     const finalCardData = filterOutMissingImages(moreCardData);
-    setCards({ data: paginate(finalCardData, 50) });
+    setCards(paginate(finalCardData, 50));
   };
 
   const handleSetChange = async (e) => {
@@ -77,8 +85,9 @@ const App = () => {
 
   useEffect(() => {
     loadCards();
+    cacheCards();
     console.log(cards);
-    console.log(page);
+    console.log(cardCache);
   }, [currentSet]);
 
   return (
