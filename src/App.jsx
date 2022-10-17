@@ -72,8 +72,8 @@ const App = () => {
   };
 
   const loadCards = async () => {
-    if (cardCache.includes((cardsObj) => cardsObj.set === currentSet)) {
-      setCards(cardsObj.cards);
+    if (cardCache.some((el) => el.set === currentSet)) {
+      await setCards(cardCache.find((el) => el.set === currentSet).cards);
     } else {
       const response = await fetch(
         `https://api.scryfall.com/cards/search?q=s%3A${currentSet}`
@@ -93,11 +93,13 @@ const App = () => {
 
   useEffect(() => {
     loadCards();
-    cacheCards();
-    console.log(cards);
+
+    // console.log(cards);
+    console.log(currentSet);
   }, [currentSet]);
 
   useEffect(() => {
+    cacheCards();
     console.log(cardCache);
   }, [cards]);
 
