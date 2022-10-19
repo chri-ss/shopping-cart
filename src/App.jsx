@@ -23,23 +23,7 @@ const App = () => {
         (set) => set.set_type === "core" || set.set_type === "expansion"
       ),
     };
-    console.log(filteredSets);
     setSets(filteredSets);
-  };
-
-  const paginate = (cards, perPage) => {
-    const paginatedCards = [];
-    let hold = [];
-    const length = cards.length;
-    for (let i = 0; i < length; ++i) {
-      hold.push(cards.shift());
-      if (hold.length === perPage) {
-        paginatedCards.push(hold);
-        hold = [];
-      }
-    }
-    paginatedCards.push(hold);
-    return paginatedCards;
   };
 
   const checkForMoreCards = async (cardData, cardHold = null) => {
@@ -58,6 +42,10 @@ const App = () => {
 
   const filterOutMissingImages = (cards) => {
     return cards.filter((card) => card.image_uris);
+  };
+
+  const addCounters = (cards) => {
+    return cards.map((card) => ({ ...card, counter: 0 }));
   };
 
   const cacheCards = () => {
@@ -80,7 +68,8 @@ const App = () => {
       );
       const cardData = await response.json();
       const moreCardData = await checkForMoreCards(cardData);
-      const finalCardData = filterOutMissingImages(moreCardData);
+      const filteredForImages = filterOutMissingImages(moreCardData);
+      const finalCardData = addCounters(filteredForImages);
       setCards(paginate(finalCardData, 50));
     }
   };
@@ -91,16 +80,41 @@ const App = () => {
     await loadCards();
   };
 
+  const handleCountChange = (e) => {
+    const flatCards = cards.flat();
+    const cardToChange = flatCards.find((card) => card.id === e.target.id);
+    if (e.target.textContent === "-") {
+      cardToChange.counter = cardToChange.counter - 1;
+    } else if (e.target.textContent === "+") {
+      cardToChange.counter = cardToChange.counter + 1;
+    } else if (e.target.nodeName === "INPUT") {
+      cardToChange.counter = parseInt(e.target.value);
+    }
+    setCards(paginate(flatCards, 50));
+  };
+
+  // const incrementCount = (e) => {
+  //   const flatCards = cards.flat();
+  //   const cardToChange = flatCards.find((card) => card.id === e.target.id);
+  //   cardToChange.counter = cardToChange.counter + 1;
+  //   setCards(paginate(flatCards, 50));
+  // };
+
+  // const decrementCount = (e) => {
+  //   console.log(e.target.textContent);
+  //   const flatCards = cards.flat();
+  //   const cardToChange = flatCards.find((card) => card.id === e.target.id);
+  //   cardToChange.counter = cardToChange.counter - 1;
+  //   setCards(paginate(flatCards, 50));
+  // };
+
   useEffect(() => {
     loadCards();
-
-    // console.log(cards);
-    console.log(currentSet);
+    console.log(sets);
   }, [currentSet]);
 
   useEffect(() => {
     cacheCards();
-    console.log(cardCache);
   }, [cards]);
 
   return (
@@ -119,6 +133,10 @@ const App = () => {
               sets={sets}
               loadSets={loadSets}
               handleSetChange={handleSetChange}
+              handleCountChange={handleCountChange}
+              // incrementCount={incrementCount}
+              // decrementCount={decrementCount}
+              const
             />
           }
         />

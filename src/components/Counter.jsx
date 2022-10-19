@@ -1,9 +1,19 @@
-const Counter = () => {
+const Counter = ({ card, handleCountChange }) => {
   return (
     <div className="counter">
-      <button>-</button>
-      <input className="counter-input" value={0}></input>
-      <button>+</button>
+      <button id={card.id} onClick={handleCountChange}>
+        -
+      </button>
+      <input
+        className="counter-input"
+        name="counter"
+        id={card.id}
+        value={card.counter}
+        onChange={handleCountChange}
+      ></input>
+      <button id={card.id} onClick={handleCountChange}>
+        +
+      </button>
     </div>
   );
 };

@@ -6,7 +6,7 @@ const CardFilter = ({ sets, loadSets, handleSetChange }) => {
     console.log(sets);
   }, []);
   return (
-    <form>
+    <form name="card-filter">
       <label>Set</label>
       <select onChange={handleSetChange}>
         {sets.data.map((set) => {

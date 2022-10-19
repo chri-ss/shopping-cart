@@ -12,9 +12,10 @@ global.fetch = vi.fn(() =>
         data: [
           {
             image_uris: {
-              border_crop:
+              large:
                 "https://cards.scryfall.io/border_crop/front/e/5/e5f9fa2d-4bf4-4fcb-9b76-fd4a9ff5a58c.jpg?1576382187",
             },
+            prices: { usd: 0.01 },
           },
         ],
       }),
