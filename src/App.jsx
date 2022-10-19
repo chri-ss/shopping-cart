@@ -12,7 +12,7 @@ const App = () => {
   const [sets, setSets] = useState({ data: [{ name: "" }] });
   const [page, setPage] = useState(1);
   const [cardCache, setCardCache] = useState([]);
-  const [cart, setCart] = useState({});
+  const [cart, setCart] = useState([]);
 
   const loadSets = async () => {
     const response = await fetch("https://api.scryfall.com/sets/");
@@ -24,6 +24,21 @@ const App = () => {
       ),
     };
     setSets(filteredSets);
+  };
+
+  const paginate = (cards, perPage) => {
+    const paginatedCards = [];
+    let hold = [];
+    const length = cards.length;
+    for (let i = 0; i < length; ++i) {
+      hold.push(cards.shift());
+      if (hold.length === perPage) {
+        paginatedCards.push(hold);
+        hold = [];
+      }
+    }
+    paginatedCards.push(hold);
+    return paginatedCards;
   };
 
   const checkForMoreCards = async (cardData, cardHold = null) => {
@@ -93,20 +108,9 @@ const App = () => {
     setCards(paginate(flatCards, 50));
   };
 
-  // const incrementCount = (e) => {
-  //   const flatCards = cards.flat();
-  //   const cardToChange = flatCards.find((card) => card.id === e.target.id);
-  //   cardToChange.counter = cardToChange.counter + 1;
-  //   setCards(paginate(flatCards, 50));
-  // };
-
-  // const decrementCount = (e) => {
-  //   console.log(e.target.textContent);
-  //   const flatCards = cards.flat();
-  //   const cardToChange = flatCards.find((card) => card.id === e.target.id);
-  //   cardToChange.counter = cardToChange.counter - 1;
-  //   setCards(paginate(flatCards, 50));
-  // };
+  const refreshCart = () => {
+    setCart(cards.flat().filter((card) => card.counter > 0));
+  };
 
   useEffect(() => {
     loadCards();
@@ -115,6 +119,8 @@ const App = () => {
 
   useEffect(() => {
     cacheCards();
+    refreshCart();
+    console.log(cart);
   }, [cards]);
 
   return (
