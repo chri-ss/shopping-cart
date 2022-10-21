@@ -104,7 +104,7 @@ const App = () => {
       cardToChange.counter = cardToChange.counter + 1;
     } else if (e.target.nodeName === "INPUT") {
       cardToChange.counter = parseInt(e.target.value);
-    }
+    } 
     setCards(paginate(flatCards, 50));
   };
 
@@ -145,7 +145,7 @@ const App = () => {
             />
           }
         />
-        <Route path="cart" element={<Cart />} />
+        <Route path="cart" element={<Cart cart={cart} />} />
       </Routes>
     </HashRouter>
   );
