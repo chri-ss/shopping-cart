@@ -109,7 +109,9 @@ const App = () => {
   };
 
   const refreshCart = () => {
-    setCart(cards.flat().filter((card) => card.counter > 0));
+    const flatCards = cardCache.flatMap((item) => item.cards).flat();
+    const freshCart = flatCards.filter((card) => card.counter > 0);
+    setCart(freshCart);
   };
 
   useEffect(() => {
@@ -140,9 +142,6 @@ const App = () => {
               loadSets={loadSets}
               handleSetChange={handleSetChange}
               handleCountChange={handleCountChange}
-              // incrementCount={incrementCount}
-              // decrementCount={decrementCount}
-              const
             />
           }
         />

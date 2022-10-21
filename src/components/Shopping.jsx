@@ -10,8 +10,6 @@ const Shopping = ({
   page,
   setPage,
   handleCountChange,
-  // incrementCount,
-  // decrementCount,
 }) => {
   return (
     <div className="route">
@@ -28,12 +26,7 @@ const Shopping = ({
               <li key={card.id} id={card.id} className="card">
                 <img src={card.image_uris ? card.image_uris.large : null}></img>
                 <div className="price">${card.prices.usd}</div>
-                <Counter
-                  card={card}
-                  handleCountChange={handleCountChange}
-                  // incrementCount={incrementCount}
-                  // decrementCount={decrementCount}
-                />
+                <Counter card={card} handleCountChange={handleCountChange} />
               </li>
             ))}
           </ul>
