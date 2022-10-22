@@ -10,6 +10,7 @@ const Shopping = ({
   page,
   setPage,
   handleCountChange,
+  currentSet,
 }) => {
   return (
     <div className="route">
@@ -18,6 +19,7 @@ const Shopping = ({
           sets={sets}
           loadSets={loadSets}
           handleSetChange={handleSetChange}
+          currentSet={currentSet}
         />
         <div>
           <Pages cards={cards} setPage={setPage} />

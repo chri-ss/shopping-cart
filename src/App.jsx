@@ -20,7 +20,9 @@ const App = () => {
     const filteredSets = {
       ...allSets,
       data: allSets.data.filter(
-        (set) => set.set_type === "core" || set.set_type === "expansion"
+        (set) =>
+          (set.set_type === "core" || set.set_type === "expansion") &&
+          set.card_count > 0
       ),
     };
     setSets(filteredSets);
@@ -93,6 +95,7 @@ const App = () => {
     setCurrentSet(e.target.value.toString());
     setPage(1);
     await loadCards();
+    // console.log(e.target);
   };
 
   const handleCountChange = (e) => {
@@ -104,7 +107,7 @@ const App = () => {
       cardToChange.counter = cardToChange.counter + 1;
     } else if (e.target.nodeName === "INPUT") {
       cardToChange.counter = parseInt(e.target.value);
-    } 
+    }
     setCards(paginate(flatCards, 50));
   };
 
@@ -115,14 +118,17 @@ const App = () => {
   };
 
   useEffect(() => {
+    loadSets();
+  }, []);
+
+  useEffect(() => {
     loadCards();
-    console.log(sets);
+    console.log(currentSet);
   }, [currentSet]);
 
   useEffect(() => {
     cacheCards();
     refreshCart();
-    console.log(cart);
   }, [cards]);
 
   return (

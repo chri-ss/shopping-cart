@@ -1,17 +1,15 @@
-import { useEffect } from "react";
-
-const CardFilter = ({ sets, loadSets, handleSetChange }) => {
-  useEffect(() => {
-    loadSets();
-    console.log(sets);
-  }, []);
+const CardFilter = ({ sets, handleSetChange, currentSet }) => {
   return (
     <form name="card-filter">
       <label>Set</label>
       <select onChange={handleSetChange}>
         {sets.data.map((set) => {
           return (
-            <option key={set.code} value={set.code}>
+            <option
+              key={set.code}
+              value={set.code}
+              selected={set.code === currentSet}
+            >
               {set.name}
             </option>
           );
