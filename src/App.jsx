@@ -109,6 +109,7 @@ const App = () => {
       cardToChange.counter = parseInt(e.target.value);
     }
     setCards(paginate(flatCards, 50));
+    console.log(cart);
   };
 
   const refreshCart = () => {
