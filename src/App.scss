@@ -1,4 +1,5 @@
 body {
+  height: 100vh;
   width: 100%;
   box-sizing: border-box;
 }
@@ -34,17 +35,17 @@ body {
 }
 
 .route {
+  // height: 100%;
   width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
-  // color: #fdfdff;
   font-size: 32px;
   flex-direction: column;
+  background-color: #393d3f;
 }
 
-.home,
-.cart {
+.home {
   height: 100vh;
 }
 
@@ -108,4 +109,44 @@ body {
 }
 .price {
   font-size: 1.5rem;
+}
+
+.cart {
+  height: 100%;
+  width: 80%;
+}
+
+.cart-table {
+  margin-top: 10vh;
+  background-color: #fdfdff;
+  width: 100%;
+  gap: 1rem;
+
+  tr {
+    padding: 1rem 0 1rem 0;
+    font-size: 1.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 2px 5px #393d3f;
+
+    .total {
+      flex: 4;
+    }
+
+    * {
+      display: flex;
+      flex: 1;
+      justify-content: center;
+      align-items: center;
+    }
+  }
+  .preview {
+    width: 1rem;
+  }
+
+  img {
+    height: auto;
+    width: 100%;
+  }
 }

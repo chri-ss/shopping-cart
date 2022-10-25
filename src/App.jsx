@@ -1,3 +1,4 @@
+import React from "react";
 import "./App.scss";
 import { HashRouter, Routes, Route } from "react-router-dom";
 import NavLinks from "./components/NavLinks";
@@ -95,7 +96,6 @@ const App = () => {
     setCurrentSet(e.target.value.toString());
     setPage(1);
     await loadCards();
-    // console.log(e.target);
   };
 
   const handleCountChange = (e) => {
@@ -124,12 +124,12 @@ const App = () => {
 
   useEffect(() => {
     loadCards();
-    console.log(currentSet);
   }, [currentSet]);
 
   useEffect(() => {
     cacheCards();
     refreshCart();
+    console.log(cart, cards);
   }, [cards]);
 
   return (

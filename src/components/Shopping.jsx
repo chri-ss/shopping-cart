@@ -1,6 +1,8 @@
+import React from "react";
 import CardFilter from "./CardFilter";
 import Pages from "./Pages.jsx";
 import Counter from "./Counter";
+import { useEffect } from "react";
 
 const Shopping = ({
   cards,
@@ -26,7 +28,7 @@ const Shopping = ({
           <ul className="card-container">
             {cards[page - 1].map((card) => (
               <li key={card.id} id={card.id} className="card">
-                <img src={card.image_uris ? card.image_uris.large : null}></img>
+                <img src={card.image_uris.large}></img>
                 <div className="price">${card.prices.usd}</div>
                 <Counter card={card} handleCountChange={handleCountChange} />
               </li>

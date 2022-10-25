@@ -1,38 +1,50 @@
-import { useEffect } from "react";
-import CardFilter from "./CardFilter";
+import React from "react";
 
 const Cart = ({ cart }) => {
   return (
-    <div className="route cart">
-      <h2>Cart</h2>
-      <table className="cart-table">
-        <tr>
-          <th>Qty</th>
-          <th>Card Name</th>
-          <th>Version</th>
-          <th>Preview</th>
-          <th>Cost</th>
-        </tr>
-        {cart.map((card) => {
-          return (
+    <div className="route ">
+      <section className="cart">
+        <h2>Cart</h2>
+        <table className="cart-table">
+          <thead>
             <tr>
-              <td>{card.counter}</td>
-              <td>{card.name}</td>
-              <td>{card.set_name}</td>
-              <td>{<img src={card.image_uris.small}></img>}</td>
-              <td>{card.prices.usd * card.counter}</td>
+              <th>Qty</th>
+              <th>Card Name</th>
+              <th>Version</th>
+              <th className="preview">Preview</th>
+              <th>Cost</th>
             </tr>
-          );
-        })}
-      </table>
-
-      {/* {cart.map((card) => {
-          return (
-            <li>
-              {card.name} : {card.counter}
-            </li>
-          );
-        })} */}
+          </thead>
+          <tbody>
+            {cart.map((card) => {
+              return (
+                <tr key={card.id}>
+                  <td>{card.counter}</td>
+                  <td>{card.name}</td>
+                  <td>{card.set_name}</td>
+                  <td className="preview">
+                    {<img src={card.image_uris.png}></img>}
+                  </td>
+                  <td>${card.prices.usd * card.counter}</td>
+                </tr>
+              );
+            })}
+          </tbody>
+          <tfoot>
+            <tr>
+              <td className="total">Total</td>
+              <td>
+                $
+                {cart.length > 0
+                  ? cart
+                      .flatMap((card) => card.prices.usd * card.counter)
+                      .reduce((prev, curr) => (prev += curr))
+                  : 0}
+              </td>
+            </tr>
+          </tfoot>
+        </table>
+      </section>
     </div>
   );
 };

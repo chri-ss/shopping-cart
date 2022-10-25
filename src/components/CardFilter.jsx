@@ -1,3 +1,5 @@
+import React from "react";
+
 const CardFilter = ({ sets, handleSetChange, currentSet }) => {
   return (
     <form name="card-filter">
