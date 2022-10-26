@@ -1,6 +1,6 @@
 import React from "react";
 
-const Cart = ({ cart }) => {
+const Cart = ({ cart, handleCountChange }) => {
   return (
     <div className="route ">
       <section className="cart">
@@ -19,7 +19,15 @@ const Cart = ({ cart }) => {
             {cart.map((card) => {
               return (
                 <tr key={card.id}>
-                  <td>{card.counter}</td>
+                  <td>
+                    <button id={card.id} onClick={handleCountChange}>
+                      -
+                    </button>
+                    {card.counter}
+                    <button id={card.id} onClick={handleCountChange}>
+                      +
+                    </button>
+                  </td>
                   <td>{card.name}</td>
                   <td>{card.set_name}</td>
                   <td className="preview">

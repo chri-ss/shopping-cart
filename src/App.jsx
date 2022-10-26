@@ -105,8 +105,13 @@ const App = () => {
       cardToChange.counter = cardToChange.counter - 1;
     } else if (e.target.textContent === "+") {
       cardToChange.counter = cardToChange.counter + 1;
-    } else if (e.target.nodeName === "INPUT") {
-      cardToChange.counter = parseInt(e.target.value);
+    } else if (
+      e.target.nodeName === "INPUT" &&
+      typeof (e.target.value === "number")
+    ) {
+      cardToChange.counter = e.target.value;
+    } else {
+      console.log(e.target);
     }
     setCards(paginate(flatCards, 50));
     console.log(cart);
@@ -129,7 +134,7 @@ const App = () => {
   useEffect(() => {
     cacheCards();
     refreshCart();
-    console.log(cart, cards);
+    console.log(cards, cardCache);
   }, [cards]);
 
   return (
@@ -152,7 +157,10 @@ const App = () => {
             />
           }
         />
-        <Route path="cart" element={<Cart cart={cart} />} />
+        <Route
+          path="cart"
+          element={<Cart cart={cart} handleCountChange={handleCountChange} />}
+        />
       </Routes>
     </HashRouter>
   );

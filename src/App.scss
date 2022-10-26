@@ -29,7 +29,7 @@ body {
     text-decoration: none;
   }
 
-  *:visited {
+  a {
     color: #fdfdff;
   }
 
@@ -50,6 +50,11 @@ body {
   }
 }
 
+button {
+  border: none;
+  font-size: 24px;
+}
+
 .route {
   width: 100%;
   display: flex;
@@ -62,6 +67,10 @@ body {
 
 .home {
   height: 100vh;
+
+  h1 {
+    color: #fdfdff;
+  }
 }
 
 .shopping {
