@@ -32,10 +32,25 @@ body {
   *:visited {
     color: #fdfdff;
   }
+
+  :last-child {
+    display: flex;
+  }
+
+  .cart-counter {
+    position: relative;
+    top: 1rem;
+    background-color: #393d3f;
+    border-radius: 50%;
+    width: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 2px solid #fdfdff;
+  }
 }
 
 .route {
-  // height: 100%;
   width: 100%;
   display: flex;
   justify-content: center;
@@ -131,7 +146,7 @@ body {
     box-shadow: 0 2px 5px #393d3f;
 
     .total {
-      flex: 4;
+      flex: 10;
     }
 
     * {
@@ -141,12 +156,21 @@ body {
       align-items: center;
     }
   }
-  .preview {
-    width: 1rem;
+
+  :not(.preview) {
+    flex: 3;
   }
 
   img {
     height: auto;
     width: 100%;
+  }
+
+  img:hover {
+    position: relative;
+    left: 4rem;
+    width: 20rem;
+    max-height: 100%;
+    flex: 3;
   }
 }

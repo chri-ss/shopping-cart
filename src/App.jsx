@@ -134,7 +134,7 @@ const App = () => {
 
   return (
     <HashRouter>
-      <NavLinks />
+      <NavLinks cart={cart} />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route

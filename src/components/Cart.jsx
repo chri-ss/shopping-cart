@@ -25,7 +25,7 @@ const Cart = ({ cart }) => {
                   <td className="preview">
                     {<img src={card.image_uris.png}></img>}
                   </td>
-                  <td>${card.prices.usd * card.counter}</td>
+                  <td>${(card.prices.usd * card.counter).toFixed(2)}</td>
                 </tr>
               );
             })}
@@ -39,6 +39,7 @@ const Cart = ({ cart }) => {
                   ? cart
                       .flatMap((card) => card.prices.usd * card.counter)
                       .reduce((prev, curr) => (prev += curr))
+                      .toFixed(2)
                   : 0}
               </td>
             </tr>
