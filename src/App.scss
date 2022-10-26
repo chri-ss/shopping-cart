@@ -1,6 +1,7 @@
 body {
-  // height: 100vh;
-  width: 100vw;
+  height: 100vh;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 #root {
@@ -11,7 +12,7 @@ body {
 
 .header {
   position: fixed;
-  width: 100vw;
+  width: 100%;
   height: 10%;
   background-color: #62929e;
   color: #fdfdff;
@@ -28,9 +29,30 @@ body {
     text-decoration: none;
   }
 
-  *:visited {
+  a {
     color: #fdfdff;
   }
+
+  :last-child {
+    display: flex;
+  }
+
+  .cart-counter {
+    position: relative;
+    top: 1rem;
+    background-color: #393d3f;
+    border-radius: 50%;
+    width: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 2px solid #fdfdff;
+  }
+}
+
+button {
+  border: none;
+  font-size: 24px;
 }
 
 .route {
@@ -38,14 +60,17 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  color: #fdfdff;
   font-size: 32px;
   flex-direction: column;
+  background-color: #393d3f;
 }
 
-.home,
-.cart {
+.home {
   height: 100vh;
+
+  h1 {
+    color: #fdfdff;
+  }
 }
 
 .shopping {
@@ -61,16 +86,22 @@ body {
 
 .card-container {
   width: 100%;
+  height: 100%;
   display: flex;
   flex-wrap: wrap;
 
   justify-content: center;
   align-items: center;
-  gap: 1rem;
+  gap: 3rem;
 }
 
 .card {
   height: 40vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding-bottom: 2rem;
 
   img {
     height: 100%;
@@ -89,4 +120,66 @@ body {
 
 .page:hover {
   color: #62929e;
+}
+
+.counter {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  input {
+    width: 20%;
+  }
+}
+.price {
+  font-size: 1.5rem;
+}
+
+.cart {
+  height: 100%;
+  width: 80%;
+}
+
+.cart-table {
+  margin-top: 10vh;
+  background-color: #fdfdff;
+  width: 100%;
+  gap: 1rem;
+
+  tr {
+    padding: 1rem 0 1rem 0;
+    font-size: 1.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 2px 5px #393d3f;
+
+    .total {
+      flex: 10;
+    }
+
+    * {
+      display: flex;
+      flex: 1;
+      justify-content: center;
+      align-items: center;
+    }
+  }
+
+  :not(.preview) {
+    flex: 3;
+  }
+
+  img {
+    height: auto;
+    width: 100%;
+  }
+
+  img:hover {
+    position: relative;
+    left: 4rem;
+    width: 20rem;
+    max-height: 100%;
+    flex: 3;
+  }
 }

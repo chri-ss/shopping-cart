@@ -1,5 +1,8 @@
+import React from "react";
 import CardFilter from "./CardFilter";
 import Pages from "./Pages.jsx";
+import Counter from "./Counter";
+import { useEffect } from "react";
 
 const Shopping = ({
   cards,
@@ -8,6 +11,8 @@ const Shopping = ({
   handleSetChange,
   page,
   setPage,
+  handleCountChange,
+  currentSet,
 }) => {
   return (
     <div className="route">
@@ -16,16 +21,16 @@ const Shopping = ({
           sets={sets}
           loadSets={loadSets}
           handleSetChange={handleSetChange}
+          currentSet={currentSet}
         />
         <div>
           <Pages cards={cards} setPage={setPage} />
           <ul className="card-container">
-            {cards.data[page - 1].map((card) => (
-              <li key={card.id} className="card">
-                <img
-                  src={card.image_uris ? card.image_uris.border_crop : null}
-                ></img>
-                ;
+            {cards[page - 1].map((card) => (
+              <li key={card.id} id={card.id} className="card">
+                <img src={card.image_uris.large}></img>
+                <div className="price">${card.prices.usd}</div>
+                <Counter card={card} handleCountChange={handleCountChange} />
               </li>
             ))}
           </ul>

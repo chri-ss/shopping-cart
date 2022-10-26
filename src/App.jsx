@@ -1,3 +1,4 @@
+import React from "react";
 import "./App.scss";
 import { HashRouter, Routes, Route } from "react-router-dom";
 import NavLinks from "./components/NavLinks";
@@ -7,10 +8,12 @@ import Cart from "./components/Cart";
 import { useEffect, useState } from "react";
 
 const App = () => {
-  const [cards, setCards] = useState({ data: [[]] });
+  const [cards, setCards] = useState([[]]);
   const [currentSet, setCurrentSet] = useState("bro");
   const [sets, setSets] = useState({ data: [{ name: "" }] });
   const [page, setPage] = useState(1);
+  const [cardCache, setCardCache] = useState([]);
+  const [cart, setCart] = useState([]);
 
   const loadSets = async () => {
     const response = await fetch("https://api.scryfall.com/sets/");
@@ -18,10 +21,11 @@ const App = () => {
     const filteredSets = {
       ...allSets,
       data: allSets.data.filter(
-        (set) => set.set_type === "core" || set.set_type === "expansion"
+        (set) =>
+          (set.set_type === "core" || set.set_type === "expansion") &&
+          set.card_count > 0
       ),
     };
-    console.log(filteredSets);
     setSets(filteredSets);
   };
 
@@ -58,14 +62,34 @@ const App = () => {
     return cards.filter((card) => card.image_uris);
   };
 
+  const addCounters = (cards) => {
+    return cards.map((card) => ({ ...card, counter: 0 }));
+  };
+
+  const cacheCards = () => {
+    if (cardCache.some((el) => el.set === cards[0][0].set)) {
+      return;
+    } else {
+      setCardCache([
+        ...cardCache,
+        { set: cards[0][0] ? cards[0][0].set : null, cards: cards },
+      ]);
+    }
+  };
+
   const loadCards = async () => {
-    const response = await fetch(
-      `https://api.scryfall.com/cards/search?q=s%3A${currentSet}`
-    );
-    const cardData = await response.json();
-    const moreCardData = await checkForMoreCards(cardData);
-    const finalCardData = filterOutMissingImages(moreCardData);
-    setCards({ data: paginate(finalCardData, 50) });
+    if (cardCache.some((el) => el.set === currentSet)) {
+      await setCards(cardCache.find((el) => el.set === currentSet).cards);
+    } else {
+      const response = await fetch(
+        `https://api.scryfall.com/cards/search?q=s%3A${currentSet}`
+      );
+      const cardData = await response.json();
+      const moreCardData = await checkForMoreCards(cardData);
+      const filteredForImages = filterOutMissingImages(moreCardData);
+      const finalCardData = addCounters(filteredForImages);
+      setCards(paginate(finalCardData, 50));
+    }
   };
 
   const handleSetChange = async (e) => {
@@ -74,15 +98,48 @@ const App = () => {
     await loadCards();
   };
 
+  const handleCountChange = (e) => {
+    const flatCards = cards.flat();
+    const cardToChange = flatCards.find((card) => card.id === e.target.id);
+    if (e.target.textContent === "-") {
+      cardToChange.counter = cardToChange.counter - 1;
+    } else if (e.target.textContent === "+") {
+      cardToChange.counter = cardToChange.counter + 1;
+    } else if (
+      e.target.nodeName === "INPUT" &&
+      typeof (e.target.value === "number")
+    ) {
+      cardToChange.counter = e.target.value;
+    } else {
+      console.log(e.target);
+    }
+    setCards(paginate(flatCards, 50));
+    console.log(cart);
+  };
+
+  const refreshCart = () => {
+    const flatCards = cardCache.flatMap((item) => item.cards).flat();
+    const freshCart = flatCards.filter((card) => card.counter > 0);
+    setCart(freshCart);
+  };
+
+  useEffect(() => {
+    loadSets();
+  }, []);
+
   useEffect(() => {
     loadCards();
-    console.log(cards);
-    console.log(page);
   }, [currentSet]);
+
+  useEffect(() => {
+    cacheCards();
+    refreshCart();
+    console.log(cards, cardCache);
+  }, [cards]);
 
   return (
     <HashRouter>
-      <NavLinks />
+      <NavLinks cart={cart} />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route
@@ -96,10 +153,14 @@ const App = () => {
               sets={sets}
               loadSets={loadSets}
               handleSetChange={handleSetChange}
+              handleCountChange={handleCountChange}
             />
           }
         />
-        <Route path="cart" element={<Cart />} />
+        <Route
+          path="cart"
+          element={<Cart cart={cart} handleCountChange={handleCountChange} />}
+        />
       </Routes>
     </HashRouter>
   );

@@ -8,4 +8,5 @@ export default defineConfig({
     globals: true,
     environment: "jsdom",
   },
+  base: "https://chri-ss.github.io/shopping-cart/",
 });
