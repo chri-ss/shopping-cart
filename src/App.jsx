@@ -99,8 +99,12 @@ const App = () => {
   };
 
   const handleCountChange = (e) => {
-    const flatCards = cards.flat();
-    const cardToChange = flatCards.find((card) => card.id === e.target.id);
+    const flatCardCache = cardCache.map((set) => set.cards.flat());
+    const setWithCard = flatCardCache.find((set) =>
+      set.some((card) => card.id === e.target.id)
+    );
+    const cardToChange = setWithCard.find((card) => card.id === e.target.id);
+
     if (e.target.textContent === "-") {
       cardToChange.counter = cardToChange.counter - 1;
     } else if (e.target.textContent === "+") {
@@ -111,10 +115,20 @@ const App = () => {
     ) {
       cardToChange.counter = e.target.value;
     } else {
-      console.log(e.target);
+      return;
     }
-    setCards(paginate(flatCards, 50));
-    console.log(cart);
+    console.log(setWithCard);
+    setCardCache(
+      cardCache.map((el) => {
+        if (el.cards.some((card) => card.id === e.target.id)) {
+          return { ...el, cards: paginate(setWithCard, 50) };
+        } else {
+          return el;
+        }
+      })
+    );
+    loadCards();
+    refreshCart();
   };
 
   const refreshCart = () => {
@@ -134,7 +148,7 @@ const App = () => {
   useEffect(() => {
     cacheCards();
     refreshCart();
-    console.log(cards, cardCache);
+    // console.log(cards, cardCache);
   }, [cards]);
 
   return (
