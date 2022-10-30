@@ -93,6 +93,12 @@ button {
   justify-content: center;
   align-items: center;
   gap: 3rem;
+  
+  .loading {
+    background-color: #62929e;
+    width: 269px;
+    height: 375px;
+  }
 }
 
 .card {

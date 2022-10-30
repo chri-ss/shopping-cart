@@ -148,7 +148,6 @@ const App = () => {
   useEffect(() => {
     cacheCards();
     refreshCart();
-    // console.log(cards, cardCache);
   }, [cards]);
 
   return (
