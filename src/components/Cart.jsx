@@ -31,7 +31,7 @@ const Cart = ({ cart, handleCountChange }) => {
                   <td>{card.name}</td>
                   <td>{card.set_name}</td>
                   <td className="preview">
-                    {<img src={card.image_uris.png}></img>}
+                    {<img className="loading" src={card.image_uris.png}></img>}
                   </td>
                   <td>${(card.prices.usd * card.counter).toFixed(2)}</td>
                 </tr>

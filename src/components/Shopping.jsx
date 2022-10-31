@@ -33,7 +33,6 @@ const Shopping = ({
                   alt=" "
                   className="loading
                   "
-                  onLoad={(e) => console.log(e.target)}
                 ></img>
                 <div className="price">${card.prices.usd}</div>
                 <Counter card={card} handleCountChange={handleCountChange} />
