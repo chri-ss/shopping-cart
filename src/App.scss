@@ -93,16 +93,16 @@ button {
   justify-content: center;
   align-items: center;
   gap: 3rem;
-  
-  .loading {
-    background-color: #62929e;
-    width: 269px;
-    height: 375px;
-  }
+  transition: background-color 1000ms ease-in-out;
+}
+
+.loading {
+  background-color: #768a8f;
 }
 
 .card {
-  height: 40vh;
+  height: 100%;
+  width: 280px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -110,7 +110,9 @@ button {
   padding-bottom: 2rem;
 
   img {
-    height: 100%;
+    border-radius: 1rem;
+    height: 390px;
+    width: 100%;
   }
 }
 

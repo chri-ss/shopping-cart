@@ -93,6 +93,8 @@ const App = () => {
   };
 
   const handleSetChange = async (e) => {
+    const images = document.querySelectorAll("img");
+    images.forEach((img) => (img.src = ""));
     setCurrentSet(e.target.value.toString());
     setPage(1);
     await loadCards();
