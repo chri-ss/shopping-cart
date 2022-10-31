@@ -95,17 +95,44 @@ button {
   gap: 3rem;
 }
 
+@keyframes shimmer {
+  0% {
+    background-color: #b2c4c9;
+  }
+  50% {
+    background-color: #fdfdff;
+  }
+
+  100% {
+    background-color: #b2c4c9;
+  }
+}
+
 .card {
-  height: 40vh;
+  height: 100%;
+  width: 280px;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 0.5rem;
   padding-bottom: 2rem;
+  border-radius: 1rem;
 
   img {
-    height: 100%;
+    border-radius: 1rem;
+    height: 390px;
+    width: 100%;
   }
+
+  img[src=""] {
+    border: none;
+    content: none;
+  }
+}
+
+.loading {
+  animation: shimmer 3000ms;
+  animation-iteration-count: infinite;
 }
 
 .pages {

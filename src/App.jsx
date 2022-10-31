@@ -137,18 +137,23 @@ const App = () => {
     setCart(freshCart);
   };
 
+  const clearImages = () => {
+    const images = document.querySelectorAll("img");
+    images.forEach((img) => (img.src = ""));
+  };
+
   useEffect(() => {
     loadSets();
   }, []);
 
   useEffect(() => {
+    clearImages();
     loadCards();
   }, [currentSet]);
 
   useEffect(() => {
     cacheCards();
     refreshCart();
-    // console.log(cards, cardCache);
   }, [cards]);
 
   return (

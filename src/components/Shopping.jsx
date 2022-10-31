@@ -28,7 +28,12 @@ const Shopping = ({
           <ul className="card-container">
             {cards[page - 1].map((card) => (
               <li key={card.id} id={card.id} className="card">
-                <img src={card.image_uris.large}></img>
+                <img
+                  src={card.image_uris.large}
+                  alt=" "
+                  className="loading
+                  "
+                ></img>
                 <div className="price">${card.prices.usd}</div>
                 <Counter card={card} handleCountChange={handleCountChange} />
               </li>
