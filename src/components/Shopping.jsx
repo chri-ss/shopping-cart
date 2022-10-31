@@ -30,7 +30,7 @@ const Shopping = ({
               <li key={card.id} id={card.id} className="card">
                 <img
                   src={card.image_uris.large}
-                  alt=""
+                  alt=" "
                   className="loading
                   "
                   onLoad={(e) => console.log(e.target)}
