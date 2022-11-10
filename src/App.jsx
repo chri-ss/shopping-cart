@@ -1,14 +1,15 @@
 import React from "react";
 import "./App.scss";
-import { HashRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import NavLinks from "./components/NavLinks";
 import Home from "./components/Home";
 import Shopping from "./components/Shopping";
 import Cart from "./components/Cart";
 import { useEffect, useState } from "react";
+import CardArea from "./components/CardArea";
 
 const App = () => {
-  const [cards, setCards] = useState([[]]);
+  const [cards, setCards] = useState([]);
   const [currentSet, setCurrentSet] = useState("bro");
   const [sets, setSets] = useState({ data: [{ name: "" }] });
   const [page, setPage] = useState(1);
@@ -29,20 +30,20 @@ const App = () => {
     setSets(filteredSets);
   };
 
-  const paginate = (cards, perPage) => {
-    const paginatedCards = [];
-    let hold = [];
-    const length = cards.length;
-    for (let i = 0; i < length; ++i) {
-      hold.push(cards.shift());
-      if (hold.length === perPage) {
-        paginatedCards.push(hold);
-        hold = [];
-      }
-    }
-    paginatedCards.push(hold);
-    return paginatedCards;
-  };
+  // const paginate = (cards, perPage) => {
+  //   const paginatedCards = [];
+  //   let hold = [];
+  //   const length = cards.length;
+  //   for (let i = 0; i < length; ++i) {
+  //     hold.push(cards.shift());
+  //     if (hold.length === perPage) {
+  //       paginatedCards.push(hold);
+  //       hold = [];
+  //     }
+  //   }
+  //   paginatedCards.push(hold);
+  //   return paginatedCards;
+  // };
 
   const checkForMoreCards = async (cardData, cardHold = null) => {
     //ensures all cards in a set are loaded
@@ -67,19 +68,19 @@ const App = () => {
   };
 
   const cacheCards = () => {
-    if (cardCache.some((el) => el.set === cards[0][0].set)) {
+    if (cardCache.some((el) => el.set === cards[0].set)) {
       return;
     } else {
       setCardCache([
         ...cardCache,
-        { set: cards[0][0] ? cards[0][0].set : null, cards: cards },
+        { set: cards[0] ? cards[0].set : null, cards: cards },
       ]);
     }
   };
 
-  const loadCards = async () => {
+  const loader = async () => {
     if (cardCache.some((el) => el.set === currentSet)) {
-      await setCards(cardCache.find((el) => el.set === currentSet).cards);
+      setCards(cardCache.find((el) => el.set === currentSet).cards);
     } else {
       const response = await fetch(
         `https://api.scryfall.com/cards/search?q=s%3A${currentSet}`
@@ -88,14 +89,14 @@ const App = () => {
       const moreCardData = await checkForMoreCards(cardData);
       const filteredForImages = filterOutMissingImages(moreCardData);
       const finalCardData = addCounters(filteredForImages);
-      setCards(paginate(finalCardData, 50));
+      setCards(finalCardData);
     }
   };
 
   const handleSetChange = async (e) => {
     setCurrentSet(e.target.value.toString());
     setPage(1);
-    await loadCards();
+    // await loadCards();
   };
 
   const handleCountChange = (e) => {
@@ -121,13 +122,13 @@ const App = () => {
     setCardCache(
       cardCache.map((el) => {
         if (el.cards.some((card) => card.id === e.target.id)) {
-          return { ...el, cards: paginate(setWithCard, 50) };
+          return { ...el, cards: setWithCard };
         } else {
           return el;
         }
       })
     );
-    loadCards();
+    // loadCards();
     refreshCart();
   };
 
@@ -144,44 +145,55 @@ const App = () => {
 
   useEffect(() => {
     loadSets();
+    // loadCards();
   }, []);
 
   useEffect(() => {
     clearImages();
-    loadCards();
+    // loadCards();
   }, [currentSet]);
 
   useEffect(() => {
     cacheCards();
-    refreshCart();
+    // refreshCart();
   }, [cards]);
 
   return (
-    <HashRouter>
-      <NavLinks cart={cart} />
+    <BrowserRouter basename="/shopping-cart">
+      <NavLinks cart={cart} currentSet={currentSet} page={page} />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route
-          path="shopping"
+          path="/shopping/"
           element={
             <Shopping
-              page={page}
-              setPage={setPage}
-              cards={cards}
-              currentSet={currentSet}
               sets={sets}
               loadSets={loadSets}
               handleSetChange={handleSetChange}
               handleCountChange={handleCountChange}
             />
           }
-        />
+        >
+          <Route
+            path="/shopping/:set/:page"
+            element={
+              <CardArea
+                cards={cards}
+                setPage={setPage}
+                handleSetChange={handleCountChange}
+                sets={sets}
+                currentSet={currentSet}
+              />
+            }
+            loader={loader}
+          />
+        </Route>
         <Route
-          path="cart"
+          path="/cart"
           element={<Cart cart={cart} handleCountChange={handleCountChange} />}
         />
       </Routes>
-    </HashRouter>
+    </BrowserRouter>
   );
 };
 

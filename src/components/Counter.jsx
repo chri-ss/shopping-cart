@@ -1,7 +1,5 @@
 import React from "react";
 
-import { useEffect } from "react";
-
 const Counter = ({ card, handleCountChange }) => {
   return (
     <div className="counter">

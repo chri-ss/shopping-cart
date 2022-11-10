@@ -3,7 +3,7 @@ import React from "react";
 const Pages = ({ cards, setPage }) => {
   return (
     <ul className="pages">
-      {cards.map((chunk) => (
+      {/* {cards.map((chunk) => (
         <li
           key={cards.indexOf(chunk)}
           className="page"
@@ -11,7 +11,7 @@ const Pages = ({ cards, setPage }) => {
         >
           {cards.indexOf(chunk) + 1}
         </li>
-      ))}
+      ))} */}
     </ul>
   );
 };
