@@ -78,7 +78,7 @@ const App = () => {
     }
   };
 
-  const loader = async () => {
+  const loadCards = async () => {
     if (cardCache.some((el) => el.set === currentSet)) {
       setCards(cardCache.find((el) => el.set === currentSet).cards);
     } else {
@@ -167,10 +167,9 @@ const App = () => {
           path="/shopping/"
           element={
             <Shopping
-              sets={sets}
-              loadSets={loadSets}
-              handleSetChange={handleSetChange}
-              handleCountChange={handleCountChange}
+              loader={loadCards}
+              currentSet={currentSet}
+              currentPage={page}
             />
           }
         >
@@ -180,12 +179,11 @@ const App = () => {
               <CardArea
                 cards={cards}
                 setPage={setPage}
-                handleSetChange={handleCountChange}
+                handleSetChange={handleSetChange}
                 sets={sets}
                 currentSet={currentSet}
               />
             }
-            loader={loader}
           />
         </Route>
         <Route

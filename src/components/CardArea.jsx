@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Pages from "./Pages";
 import Counter from "./Counter";
 import CardFilter from "./CardFilter";
