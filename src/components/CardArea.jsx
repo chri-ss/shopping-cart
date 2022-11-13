@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import Pages from "./Pages";
 import Counter from "./Counter";
 import CardFilter from "./CardFilter";
@@ -6,6 +6,7 @@ import CardFilter from "./CardFilter";
 const CardArea = ({
   cards,
   sets,
+  page,
   currentSet,
   setPage,
   handleCountChange,
@@ -20,7 +21,7 @@ const CardArea = ({
       />
       <Pages cards={cards} setPage={setPage} />
       <ul className="card-container">
-        {cards.map((card) => (
+        {cards[page - 1].map((card) => (
           <li key={card.id} id={card.id} className="card">
             <img
               src={card.image_uris.large}

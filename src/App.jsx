@@ -9,7 +9,9 @@ import { useEffect, useState } from "react";
 import CardArea from "./components/CardArea";
 
 const App = () => {
-  const [cards, setCards] = useState([]);
+  const [cards, setCards] = useState([
+    [{ id: "", image_uris: { large: "" }, prices: { usd: 0.0 } }],
+  ]);
   const [currentSet, setCurrentSet] = useState("bro");
   const [sets, setSets] = useState({ data: [{ name: "" }] });
   const [page, setPage] = useState(1);
@@ -30,20 +32,20 @@ const App = () => {
     setSets(filteredSets);
   };
 
-  // const paginate = (cards, perPage) => {
-  //   const paginatedCards = [];
-  //   let hold = [];
-  //   const length = cards.length;
-  //   for (let i = 0; i < length; ++i) {
-  //     hold.push(cards.shift());
-  //     if (hold.length === perPage) {
-  //       paginatedCards.push(hold);
-  //       hold = [];
-  //     }
-  //   }
-  //   paginatedCards.push(hold);
-  //   return paginatedCards;
-  // };
+  const paginate = (cards, perPage) => {
+    const paginatedCards = [];
+    let hold = [];
+    const length = cards.length;
+    for (let i = 0; i < length; ++i) {
+      hold.push(cards.shift());
+      if (hold.length === perPage) {
+        paginatedCards.push(hold);
+        hold = [];
+      }
+    }
+    paginatedCards.push(hold);
+    return paginatedCards;
+  };
 
   const checkForMoreCards = async (cardData, cardHold = null) => {
     //ensures all cards in a set are loaded
@@ -68,19 +70,19 @@ const App = () => {
   };
 
   const cacheCards = () => {
-    if (cardCache.some((el) => el.set === cards[0].set)) {
+    if (cardCache.some((el) => el.set === currentSet)) {
       return;
     } else {
       setCardCache([
         ...cardCache,
-        { set: cards[0] ? cards[0].set : null, cards: cards },
+        { set: cards[0][0] ? cards[0][0].set : null, cards: cards },
       ]);
     }
   };
 
   const loadCards = async () => {
     if (cardCache.some((el) => el.set === currentSet)) {
-      setCards(cardCache.find((el) => el.set === currentSet).cards);
+      await setCards(cardCache.find((el) => el.set === currentSet).cards);
     } else {
       const response = await fetch(
         `https://api.scryfall.com/cards/search?q=s%3A${currentSet}`
@@ -89,14 +91,13 @@ const App = () => {
       const moreCardData = await checkForMoreCards(cardData);
       const filteredForImages = filterOutMissingImages(moreCardData);
       const finalCardData = addCounters(filteredForImages);
-      setCards(finalCardData);
+      setCards(paginate(finalCardData, 50));
     }
   };
 
   const handleSetChange = async (e) => {
     setCurrentSet(e.target.value.toString());
     setPage(1);
-    // await loadCards();
   };
 
   const handleCountChange = (e) => {
@@ -118,7 +119,6 @@ const App = () => {
     } else {
       return;
     }
-    console.log(setWithCard);
     setCardCache(
       cardCache.map((el) => {
         if (el.cards.some((card) => card.id === e.target.id)) {
@@ -128,12 +128,13 @@ const App = () => {
         }
       })
     );
-    // loadCards();
+    loadCards();
     refreshCart();
   };
 
   const refreshCart = () => {
     const flatCards = cardCache.flatMap((item) => item.cards).flat();
+    console.log(cardCache);
     const freshCart = flatCards.filter((card) => card.counter > 0);
     setCart(freshCart);
   };
@@ -150,12 +151,12 @@ const App = () => {
 
   useEffect(() => {
     clearImages();
-    // loadCards();
+    loadCards();
   }, [currentSet]);
 
   useEffect(() => {
     cacheCards();
-    // refreshCart();
+    refreshCart();
   }, [cards]);
 
   return (
@@ -167,9 +168,11 @@ const App = () => {
           path="/shopping/"
           element={
             <Shopping
-              loader={loadCards}
+              loadCards={loadCards}
               currentSet={currentSet}
               currentPage={page}
+              setCurrentSet={setCurrentSet}
+              setPage={setPage}
             />
           }
         >
@@ -179,7 +182,9 @@ const App = () => {
               <CardArea
                 cards={cards}
                 setPage={setPage}
+                page={page}
                 handleSetChange={handleSetChange}
+                handleCountChange={handleCountChange}
                 sets={sets}
                 currentSet={currentSet}
               />
