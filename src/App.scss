@@ -139,6 +139,10 @@ button {
   display: flex;
   justify-content: center;
   color: #393d3f;
+
+  .active {
+    color: #cf4f05;
+  }
 }
 
 .page {

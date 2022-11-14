@@ -19,7 +19,7 @@ const CardArea = ({
         handleSetChange={handleSetChange}
         currentSet={currentSet}
       />
-      <Pages cards={cards} setPage={setPage} />
+      <Pages cards={cards} setPage={setPage} page={page} />
       <ul className="card-container">
         {cards[page - 1].map((card) => (
           <li key={card.id} id={card.id} className="card">
