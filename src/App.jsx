@@ -10,13 +10,29 @@ import CardArea from "./components/CardArea";
 
 const App = () => {
   const [cards, setCards] = useState([
-    [{ id: "", image_uris: { large: "" }, prices: { usd: 0.0 } }],
+    [
+      {
+        id: "",
+        image_uris: { large: "" },
+        prices: { usd: 0.0 },
+        colors: [],
+        color_identity: [],
+      },
+    ],
   ]);
   const [currentSet, setCurrentSet] = useState("bro");
   const [sets, setSets] = useState({ data: [{ name: "" }] });
   const [page, setPage] = useState(1);
   const [cardCache, setCardCache] = useState([]);
   const [cart, setCart] = useState([]);
+  const [filter, setFilter] = useState({
+    W: true,
+    B: true,
+    U: true,
+    G: true,
+    R: true,
+    C: true,
+  });
 
   const loadSets = async () => {
     const response = await fetch("https://api.scryfall.com/sets/");
@@ -144,6 +160,36 @@ const App = () => {
     images.forEach((img) => (img.src = ""));
   };
 
+  const handleFilterChange = (e) => {
+    const symbol = e.target.name;
+    setFilter({
+      ...filter,
+      [`${symbol}`]: filter[symbol] === true ? false : true,
+    });
+  };
+
+  const checkFilter = (card) => {
+    let flag = false;
+    for (const key in filter) {
+      if (
+        (card.colors.includes(key) || card.color_identity.includes(key)) &&
+        filter[key] === false
+      ) {
+        flag = true;
+      }
+    }
+    return { ...card, filtered: flag };
+  };
+
+  const filterCards = () => {
+    const flatCards = cards.flat();
+    const filteredCards = flatCards.map((card) => checkFilter(card));
+    const unfiltered = filteredCards.filter((card) => card.filtered === false);
+    const filtered = filteredCards.filter((card) => card.filtered === true);
+    const recombined = paginate(unfiltered, 50).concat([filtered]);
+    console.log(recombined);
+  };
+
   useEffect(() => {
     loadSets();
     // loadCards();
@@ -158,6 +204,10 @@ const App = () => {
     cacheCards();
     refreshCart();
   }, [cards]);
+
+  useEffect(() => {
+    filterCards();
+  }, [filter]);
 
   return (
     <BrowserRouter basename="/shopping-cart">
@@ -187,6 +237,8 @@ const App = () => {
                 handleCountChange={handleCountChange}
                 sets={sets}
                 currentSet={currentSet}
+                filter={filter}
+                handleFilterChange={handleFilterChange}
               />
             }
           />

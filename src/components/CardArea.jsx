@@ -11,6 +11,8 @@ const CardArea = ({
   setPage,
   handleCountChange,
   handleSetChange,
+  filter,
+  handleFilterChange,
 }) => {
   return (
     <div>
@@ -18,6 +20,8 @@ const CardArea = ({
         sets={sets}
         handleSetChange={handleSetChange}
         currentSet={currentSet}
+        filter={filter}
+        handleFilterChange={handleFilterChange}
       />
       <Pages cards={cards} setPage={setPage} page={page} />
       <ul className="card-container">
