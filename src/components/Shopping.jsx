@@ -1,46 +1,33 @@
-import React from "react";
-import CardFilter from "./CardFilter";
-import Pages from "./Pages.jsx";
-import Counter from "./Counter";
-import { useEffect } from "react";
+import React, { useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+
+import { Outlet } from "react-router-dom";
 
 const Shopping = ({
-  cards,
-  sets,
-  loadSets,
-  handleSetChange,
-  page,
-  setPage,
-  handleCountChange,
   currentSet,
+  currentPage,
+  setCurrentSet,
+  setPage,
+  loadCards,
 }) => {
+  const { set, page } = useParams();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    setCurrentSet(set);
+    setPage(1);
+    navigate(`/shopping/${set}/${page}`);
+  }, []);
+
+  useEffect(() => {
+    navigate(`/shopping/${currentSet}/${currentPage}`);
+    console.log(set, page);
+  }, [currentSet, currentPage]);
+
   return (
     <div className="route">
       <section className="shopping">
-        <CardFilter
-          sets={sets}
-          loadSets={loadSets}
-          handleSetChange={handleSetChange}
-          currentSet={currentSet}
-        />
-        <div>
-          <Pages cards={cards} setPage={setPage} />
-          <ul className="card-container">
-            {cards[page - 1].map((card) => (
-              <li key={card.id} id={card.id} className="card">
-                <img
-                  src={card.image_uris.large}
-                  alt=" "
-                  className="loading
-                  "
-                ></img>
-                <div className="price">${card.prices.usd}</div>
-                <Counter card={card} handleCountChange={handleCountChange} />
-              </li>
-            ))}
-          </ul>
-          <Pages cards={cards} setPage={setPage} />
-        </div>
+        <Outlet />
       </section>
     </div>
   );
