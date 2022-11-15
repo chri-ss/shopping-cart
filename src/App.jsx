@@ -17,6 +17,7 @@ const App = () => {
         prices: { usd: 0.0 },
         colors: [],
         color_identity: [],
+        filtered: false,
       },
     ],
   ]);
@@ -106,7 +107,20 @@ const App = () => {
       const cardData = await response.json();
       const moreCardData = await checkForMoreCards(cardData);
       const filteredForImages = filterOutMissingImages(moreCardData);
-      const finalCardData = addCounters(filteredForImages);
+      const filteredForRelevantData = filteredForImages.map((card) => {
+        return {
+          set: card.set,
+          set_id: card.set_id,
+          set_name: card.set_name,
+          name: card.name,
+          id: card.id,
+          image_uris: card.image_uris,
+          prices: card.prices,
+          colors: card.colors,
+          color_identity: card.color_identity,
+        };
+      });
+      const finalCardData = addCounters(filteredForRelevantData);
       setCards(paginate(finalCardData, 50));
     }
   };
@@ -150,7 +164,6 @@ const App = () => {
 
   const refreshCart = () => {
     const flatCards = cardCache.flatMap((item) => item.cards).flat();
-    console.log(cardCache);
     const freshCart = flatCards.filter((card) => card.counter > 0);
     setCart(freshCart);
   };
@@ -187,7 +200,9 @@ const App = () => {
     const unfiltered = filteredCards.filter((card) => card.filtered === false);
     const filtered = filteredCards.filter((card) => card.filtered === true);
     const recombined = paginate(unfiltered, 50).concat([filtered]);
-    console.log(recombined);
+    // console.log(recombined);
+    setCards(recombined);
+    setPage(1);
   };
 
   useEffect(() => {
@@ -196,8 +211,10 @@ const App = () => {
   }, []);
 
   useEffect(() => {
+    // filterCards();
     clearImages();
     loadCards();
+    console.log(cards);
   }, [currentSet]);
 
   useEffect(() => {
