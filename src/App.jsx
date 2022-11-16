@@ -136,35 +136,43 @@ const App = () => {
   };
 
   const handleCountChange = (e) => {
-    const flatCardCache = cardCache.map((set) => set.cards.flat());
-    const setWithCard = flatCardCache.find((set) =>
-      set.some((card) => card.id === e.target.id)
-    );
-    const cardToChange = setWithCard.find((card) => card.id === e.target.id);
+    let localCounter;
 
     if (e.target.textContent === "-") {
-      cardToChange.counter = cardToChange.counter - 1;
+      localCounter = -1;
     } else if (e.target.textContent === "+") {
-      cardToChange.counter = cardToChange.counter + 1;
+      localCounter = 1;
     } else if (
       e.target.nodeName === "INPUT" &&
       typeof (e.target.value === "number")
     ) {
-      cardToChange.counter = e.target.value;
+      localCounter = e.target.value;
     } else {
       return;
     }
+
+    const flatCards = cards.flat();
+    setCards(
+      paginate(
+        flatCards.map((card) => {
+          if (card.id === e.target.id) {
+            return { ...card, counter: card.counter + localCounter };
+          } else {
+            return card;
+          }
+        }),
+        50
+      )
+    );
     setCardCache(
       cardCache.map((el) => {
-        if (el.cards.some((card) => card.id === e.target.id)) {
-          return { ...el, cards: setWithCard };
+        if (el.set === currentSet) {
+          return { ...el, cards: cards };
         } else {
           return el;
         }
       })
     );
-    loadCards();
-    refreshCart();
   };
 
   const refreshCart = () => {
@@ -214,12 +222,10 @@ const App = () => {
     const filtered = filteredCards.filter((card) => card.filtered === true);
     const recombined = paginate(sortedUnfiltered, 50).concat([filtered]);
     setCards(recombined);
-    setPage(1);
   };
 
   useEffect(() => {
     loadSets();
-    console.log("hi");
   }, []);
 
   useEffect(() => {
@@ -230,11 +236,12 @@ const App = () => {
   useEffect(() => {
     cacheCards();
     refreshCart();
-    console.log(cards);
+    console.log(cardCache);
   }, [cards]);
 
   useEffect(() => {
     filterCards();
+    setPage(1);
   }, [filter]);
 
   return (
