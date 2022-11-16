@@ -10,6 +10,7 @@ const Pages = ({ cards, setPage, page }) => {
       )}
 
       {cards.map((chunk) => (
+        chunk[0] && 
         <li
           key={cards.indexOf(chunk)}
           className={cards.indexOf(chunk) === page - 1 ? "active" : "page"}

@@ -86,6 +86,10 @@ const App = () => {
     return cards.map((card) => ({ ...card, counter: 0 }));
   };
 
+  const addFilters = (cards) => {
+    return cards.map((card) => ({ ...card, filtered: false }));
+  };
+
   const cacheCards = () => {
     if (cardCache.some((el) => el.set === currentSet)) {
       return;
@@ -120,7 +124,8 @@ const App = () => {
           color_identity: card.color_identity,
         };
       });
-      const finalCardData = addCounters(filteredForRelevantData);
+      const counters = addCounters(filteredForRelevantData);
+      const finalCardData = addFilters(counters);
       setCards(paginate(finalCardData, 50));
     }
   };
@@ -198,28 +203,34 @@ const App = () => {
     const flatCards = cards.flat();
     const filteredCards = flatCards.map((card) => checkFilter(card));
     const unfiltered = filteredCards.filter((card) => card.filtered === false);
+    const sortedUnfiltered = unfiltered.sort((a, b) => {
+      if (a.name < b.name) {
+        return -1;
+      } else if (a.name > b.name) {
+        return 1;
+      }
+      return;
+    });
     const filtered = filteredCards.filter((card) => card.filtered === true);
-    const recombined = paginate(unfiltered, 50).concat([filtered]);
-    // console.log(recombined);
+    const recombined = paginate(sortedUnfiltered, 50).concat([filtered]);
     setCards(recombined);
     setPage(1);
   };
 
   useEffect(() => {
     loadSets();
-    // loadCards();
+    console.log("hi");
   }, []);
 
   useEffect(() => {
-    // filterCards();
     clearImages();
     loadCards();
-    console.log(cards);
   }, [currentSet]);
 
   useEffect(() => {
     cacheCards();
     refreshCart();
+    console.log(cards);
   }, [cards]);
 
   useEffect(() => {
@@ -240,6 +251,7 @@ const App = () => {
               currentPage={page}
               setCurrentSet={setCurrentSet}
               setPage={setPage}
+              filterCards={filterCards}
             />
           }
         >
