@@ -62,7 +62,7 @@ const CardFilter = ({
         <label htmlFor="">colorless</label>
         <input
           type="checkbox"
-          name=""
+          name="C"
           checked={filter.C}
           onChange={handleFilterChange}
         />

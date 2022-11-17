@@ -9,18 +9,7 @@ import { useEffect, useState } from "react";
 import CardArea from "./components/CardArea";
 
 const App = () => {
-  const [cards, setCards] = useState([
-    [
-      {
-        id: "",
-        image_uris: { large: "" },
-        prices: { usd: 0.0 },
-        colors: [],
-        color_identity: [],
-        filtered: false,
-      },
-    ],
-  ]);
+  const [cards, setCards] = useState([[]]);
   const [currentSet, setCurrentSet] = useState("bro");
   const [sets, setSets] = useState({ data: [{ name: "" }] });
   const [page, setPage] = useState(1);
@@ -120,7 +109,11 @@ const App = () => {
           id: card.id,
           image_uris: card.image_uris,
           prices: card.prices,
-          colors: card.colors,
+          colors:
+            //ternary is for colorless case for filter
+            card.colors.length === 0 && card.color_identity.length === 0
+              ? "C"
+              : card.colors,
           color_identity: card.color_identity,
         };
       });
@@ -128,6 +121,7 @@ const App = () => {
       const finalCardData = addFilters(counters);
       setCards(paginate(finalCardData, 50));
     }
+    // await filterCards();
   };
 
   const handleSetChange = async (e) => {
@@ -152,6 +146,7 @@ const App = () => {
     }
 
     const flatCards = cards.flat();
+
     setCards(
       paginate(
         flatCards.map((card) => {
@@ -182,6 +177,7 @@ const App = () => {
   };
 
   const clearImages = () => {
+    filterCards();
     const images = document.querySelectorAll("img");
     images.forEach((img) => (img.src = ""));
   };
@@ -221,7 +217,8 @@ const App = () => {
     });
     const filtered = filteredCards.filter((card) => card.filtered === true);
     const recombined = paginate(sortedUnfiltered, 50).concat([filtered]);
-    setCards(recombined);
+    // setCards(recombined);
+    return recombined;
   };
 
   useEffect(() => {
@@ -231,6 +228,7 @@ const App = () => {
   useEffect(() => {
     clearImages();
     loadCards();
+    setFilter(filter);
   }, [currentSet]);
 
   useEffect(() => {
@@ -240,7 +238,7 @@ const App = () => {
   }, [cards]);
 
   useEffect(() => {
-    filterCards();
+    setCards(filterCards());
     setPage(1);
   }, [filter]);
 
