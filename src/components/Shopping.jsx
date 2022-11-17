@@ -3,13 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 
 import { Outlet } from "react-router-dom";
 
-const Shopping = ({
-  currentSet,
-  currentPage,
-  setCurrentSet,
-  setPage,
-  loadCards,
-}) => {
+const Shopping = ({ currentSet, currentPage, setCurrentSet, setPage }) => {
   const { set, page } = useParams();
   const navigate = useNavigate();
 
