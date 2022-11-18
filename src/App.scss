@@ -214,3 +214,27 @@ button {
     flex: 3;
   }
 }
+
+.checkout {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+
+  p {
+    width: 50%;
+    height: 50%;
+    background-color: #fdfdff;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    border-radius: 1rem;
+    text-align: center;
+  }
+}
+
+.checkout-link {
+  background-color: #fdfdff;
+}

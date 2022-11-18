@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const Cart = ({ cart, handleCountChange }) => {
   return (
@@ -53,6 +54,9 @@ const Cart = ({ cart, handleCountChange }) => {
             </tr>
           </tfoot>
         </table>
+        <Link className="checkout-link" to="/checkout">
+          checkout
+        </Link>
       </section>
     </div>
   );

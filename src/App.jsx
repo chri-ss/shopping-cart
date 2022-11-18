@@ -5,6 +5,7 @@ import NavLinks from "./components/NavLinks";
 import Home from "./components/Home";
 import Shopping from "./components/Shopping";
 import Cart from "./components/Cart";
+import Checkout from "./components/Checkout";
 import { useEffect, useState } from "react";
 import CardArea from "./components/CardArea";
 
@@ -15,7 +16,7 @@ const App = () => {
   const [page, setPage] = useState(1);
   const [cardCache, setCardCache] = useState([]);
   const [cart, setCart] = useState([]);
-  const [filter, setFilter] = useState({
+  const [initialFilter, setInitialFilter] = useState({
     W: true,
     B: true,
     U: true,
@@ -23,6 +24,7 @@ const App = () => {
     R: true,
     C: true,
   });
+  const [filter, setFilter] = useState(initialFilter);
 
   const loadSets = async () => {
     const response = await fetch("https://api.scryfall.com/sets/");
@@ -122,6 +124,7 @@ const App = () => {
       setCards(paginate(finalCardData, 50));
     }
     // await filterCards();
+    setFilter(initialFilter);
   };
 
   const handleSetChange = async (e) => {
@@ -228,7 +231,6 @@ const App = () => {
   useEffect(() => {
     clearImages();
     loadCards();
-    setFilter(filter);
   }, [currentSet]);
 
   useEffect(() => {
@@ -281,6 +283,7 @@ const App = () => {
           path="/cart"
           element={<Cart cart={cart} handleCountChange={handleCountChange} />}
         />
+        <Route path="checkout" element={<Checkout />} />
       </Routes>
     </BrowserRouter>
   );
