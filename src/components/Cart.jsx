@@ -54,9 +54,11 @@ const Cart = ({ cart, handleCountChange }) => {
             </tr>
           </tfoot>
         </table>
-        <Link className="checkout-link" to="/checkout">
-          checkout
-        </Link>
+        <div className="checkout">
+          <Link className="checkout-link" to="/checkout">
+            checkout
+          </Link>
+        </div>
       </section>
     </div>
   );

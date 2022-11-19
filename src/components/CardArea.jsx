@@ -38,7 +38,7 @@ const CardArea = ({
           </li>
         ))}
       </ul>
-      <Pages cards={cards} setPage={setPage} />
+      <Pages cards={cards} setPage={setPage} page={page} />
     </div>
   );
 };

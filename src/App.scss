@@ -220,6 +220,7 @@ button {
   justify-content: center;
   align-items: center;
   height: 100%;
+  padding: 1rem;
 
   p {
     width: 50%;
@@ -237,4 +238,6 @@ button {
 
 .checkout-link {
   background-color: #fdfdff;
+  padding: 1rem;
+  border-radius: 1rem;
 }
